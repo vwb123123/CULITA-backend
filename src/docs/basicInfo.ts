@@ -1,9 +1,9 @@
 export const basicInfo = {
     openapi: '3.0.0',
     info: {
-        title: 'GentleMonster Copy Project API',
+        title: 'Culita Copy Project API',
         version: '1.0.0',
-        description: 'GentleMonster 백엔드 API 문서입니다.',
+        description: 'Culita 백엔드 API 문서입니다.',
     },
     servers: [
         {
