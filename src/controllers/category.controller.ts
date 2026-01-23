@@ -15,7 +15,7 @@ export class CategoryController {
 
     async getCategoryByPath(req: Request, res: Response, next: NextFunction) {
         try {
-            const path = req.params.path as string | string[];
+            const path = req.params.path as string;
             const result = await categoryService.getCategoryByPath(path);
             res.status(200).json(result);
         } catch (error) {
