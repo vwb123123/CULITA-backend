@@ -1,17 +1,29 @@
 import { Router } from "express";
 import { AdminUserController } from "../controllers/admin.user.controller";
 import { isAdmin } from "../middlewares/admin.middleware";
-import { authenticateJwt } from "../middlewares/auth.middleware"; // 이전에 만든 미들웨어 사용
+import { authenticateJwt } from "../middlewares/auth.middleware";
+import { validateBody, validateParams, validateQuery } from "../middlewares/validation.middleware";
+import {
+    createUserSchema,
+    paginationQuerySchema,
+    updateUserSchema,
+    userIdParamSchema,
+} from "../schemas/admin.user.schema";
 
 const router = Router();
 const adminUserController = new AdminUserController();
 
 router.use(authenticateJwt, isAdmin);
 
-router.get("/users", adminUserController.getUsers);
-router.get("/users/:id", adminUserController.getUser);
-router.post("/users", adminUserController.createUser);
-router.put("/users/:id", adminUserController.updateUser);
-router.delete("/users/:id", adminUserController.deleteUser);
+router.get("/users", validateQuery(paginationQuerySchema), adminUserController.getUsers);
+router.get("/users/:id", validateParams(userIdParamSchema), adminUserController.getUser);
+router.post("/users", validateBody(createUserSchema), adminUserController.createUser);
+router.put(
+    "/users/:id",
+    validateParams(userIdParamSchema),
+    validateBody(updateUserSchema),
+    adminUserController.updateUser,
+);
+router.delete("/users/:id", validateParams(userIdParamSchema), adminUserController.deleteUser);
 
 export default router;

@@ -1,20 +1,9 @@
 import { prisma } from "../config/prisma";
 import { HttpException } from "../utils/exception.utils";
-
-interface CreateCategoryDto {
-    name: string;
-    path: string;
-    parentId?: number;
-}
-
-interface UpdateCategoryDto {
-    name?: string;
-    path?: string;
-    parentId?: number | null;
-}
+import { CreateCategoryInput, UpdateCategoryInput } from "../schemas/admin.category.schema";
 
 export class AdminCategoryService {
-    async createCategory(data: CreateCategoryDto) {
+    async createCategory(data: CreateCategoryInput) {
         const existingPath = await prisma.category.findUnique({
             where: { path: data.path },
         });
@@ -41,7 +30,7 @@ export class AdminCategoryService {
         });
     }
 
-    async updateCategory(categoryId: number, data: UpdateCategoryDto) {
+    async updateCategory(categoryId: number, data: UpdateCategoryInput) {
         const category = await prisma.category.findUnique({
             where: { id: categoryId },
         });

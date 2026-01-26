@@ -3,30 +3,13 @@ import jwt from "jsonwebtoken";
 import { Role } from "@prisma/client";
 import { prisma } from "../config/prisma";
 import { HttpException } from "../utils/exception.utils";
+import { LoginInput, RegisterInput } from "../schemas/auth.schema";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-interface RegisterParams {
-    username: string;
-    name: string;
-    email: string;
-    phoneNumber: string;
-    password: string;
-    password_confirm: string;
-}
-
-interface LoginParams {
-    username: string;
-    password: string;
-}
-
 export class AuthService {
-    async register(data: RegisterParams) {
-        const { username, email, password, password_confirm, name,phoneNumber } = data;
-
-        if (password !== password_confirm) {
-            throw new HttpException(400, "비밀번호가 일치하지 않습니다.");
-        }
+    async register(data: RegisterInput) {
+        const { username, email, password, name, phoneNumber } = data;
 
         const existingUser = await prisma.user.findFirst({
             where: { OR: [{ email }, { username }] },
@@ -53,7 +36,7 @@ export class AuthService {
         return userWithoutPassword;
     }
 
-    async login(data: LoginParams) {
+    async login(data: LoginInput) {
         const { username, password } = data;
 
         const user = await prisma.user.findUnique({
