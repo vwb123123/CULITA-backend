@@ -20,7 +20,11 @@ export type CategoryResponse = z.infer<typeof baseCategorySchema> & {
 };
 
 export const categoryResponseSchema: z.ZodType<CategoryResponse> = baseCategorySchema.extend({
-    children: z.lazy(() => z.array(categoryResponseSchema)),
+    children: z.array(z.any())
+        .openapi({
+            type: 'array',
+            items: { $ref: '#/components/schemas/CategoryResponse' }
+        }),
 }).openapi({ title: "CategoryResponse" });
 
 export const breadcrumbSchema = z.object({
