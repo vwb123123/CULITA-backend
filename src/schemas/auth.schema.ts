@@ -1,6 +1,9 @@
-import { z } from "zod";
+import z from "zod";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { registry } from "../config/openApi";
 import { Role } from "@prisma/client";
+
+extendZodWithOpenApi(z);
 
 export const registerSchema = z
     .object({
@@ -66,7 +69,6 @@ registry.registerPath({
     },
 });
 
-// 로그인 명세
 registry.registerPath({
     method: "post",
     path: "/auth/login",

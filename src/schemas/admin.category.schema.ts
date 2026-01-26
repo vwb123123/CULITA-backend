@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { registry } from "../config/openApi";
-import { categoryResponseSchema } from "./category.schema"; // 공용 카테고리 응답 스키마 재사용
+import { categoryResponseSchema } from "./category.schema";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+
+extendZodWithOpenApi(z);
 
 export const categoryIdParamSchema = z.object({
     id: z.coerce.number().openapi({ example: 1, description: "카테고리 ID" }),

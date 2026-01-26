@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { registry } from "../config/openApi";
 import { userResponseSchema } from "./auth.schema";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+
+extendZodWithOpenApi(z);
 
 export const userIdParamSchema = z.object({
     id: z.coerce.number().openapi({ example: 1, description: "사용자 ID" }),

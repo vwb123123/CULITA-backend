@@ -29,6 +29,8 @@ model User {
   password    String
   phoneNumber String
   role        Role
+
+  cart Cart?
 }
 
 model Category {
@@ -69,6 +71,7 @@ model Product {
   images     ProductImage[]
   categoryId Int
   category   Category       @relation(fields: [categoryId], references: [id])
+  cartItem   CartItem[]
 }
 
 model ProductImage {
@@ -80,4 +83,28 @@ model ProductImage {
   order     Int
   product   Product?         @relation(fields: [productId], references: [id])
   productId Int?
+}
+
+model Cart {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int        @unique
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items  CartItem[]
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  quantity  Int      @default(1)
+
+  cartId    Int
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId])
 }
