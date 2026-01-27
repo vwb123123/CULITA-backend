@@ -12,6 +12,8 @@ import { apiReference } from "@scalar/express-api-reference";
 import cartRoute from "./routes/cart.route";
 import adminCategoryRoute from "./routes/admin.category.route";
 import userRoute from "./routes/user.route";
+import productRoute from "./routes/product.route";
+import adminProductRoute from "./routes/admin.product.route";
 
 const app = express();
 const PORT = process.env.PORT || 4101;
@@ -35,11 +37,14 @@ app.use(
 );
 
 app.use(validateClientKey);
+
 app.use("/api/auth", authRoute);
 app.use("/api/admin/users", adminUserRoute);
 app.use("/api/admin/categories", adminCategoryRoute);
+app.use("/api/products", adminProductRoute);
 app.use("/api/users", userRoute);
 app.use("/api/categories", categoryRoute);
+app.use("/api/products", productRoute);
 app.use("/api/cart", cartRoute);
 
 app.use(errorMiddleware);
