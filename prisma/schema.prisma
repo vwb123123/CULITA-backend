@@ -46,7 +46,7 @@ model Category {
 
   products Product[]
 
-  @@unique([parentId, path]) // 같은 부모 아래에서는 path가 중복되면 안 됨 (복합 유니크 키 권장)
+  @@unique([parentId, path])
 }
 
 model Product {

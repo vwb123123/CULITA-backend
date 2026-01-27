@@ -11,6 +11,7 @@ import { generateOpenApiDocs } from "./config/openApi";
 import { apiReference } from "@scalar/express-api-reference";
 import cartRoute from "./routes/cart.route";
 import adminCategoryRoute from "./routes/admin.category.route";
+import userRoute from "./routes/user.route";
 
 const app = express();
 const PORT = process.env.PORT || 4101;
@@ -36,7 +37,8 @@ app.use(
 app.use(validateClientKey);
 app.use("/api/auth", authRoute);
 app.use("/api/admin/users", adminUserRoute);
-app.use("/api/admin/categories", adminCategoryRoute)
+app.use("/api/admin/categories", adminCategoryRoute);
+app.use("/api/users", userRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/cart", cartRoute);
 
