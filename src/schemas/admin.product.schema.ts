@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { registry } from "../config/openApi";
 import { productDetailSchema } from "./product.schema";
+import { ProductImageType } from "@prisma/client";
+
+const productImageInputSchema = z.object({
+    url: z.url().openapi({ example: "https://storage.googleapis.com/..." }),
+    type: z.enum(ProductImageType).openapi({ example: "MAIN" }),
+    order: z.number().int().openapi({ example: 0 }),
+});
 
 export const createProductSchema = z.object({
     name: z.string().min(1).openapi({ example: "에센스 토너" }),
@@ -20,12 +27,10 @@ export const createProductSchema = z.object({
     isBest: z.coerce.boolean().optional().default(false),
     isNew: z.coerce.boolean().optional().default(true),
 
-    imageMetadata: z
-        .string()
-        .openapi({ example: '[{"type":"MAIN","order":0},{"type":"HOVER","order":1}]' }),
+    images: z.array(productImageInputSchema).openapi({ description: "업로드된 이미지 정보 배열" }),
 });
 
-export const updateProductSchema = createProductSchema.partial().omit({ imageMetadata: true });
+export const updateProductSchema = createProductSchema.partial();
 
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
@@ -35,23 +40,12 @@ registry.registerPath({
     path: "/admin/products",
     summary: "상품 등록 (이미지 업로드)",
     description:
-        'multipart/form-data로 전송해야 합니다. "images" 필드에 파일을, "imageMetadata" 필드에 JSON 문자열을 보냅니다.',
+        "이미지 URL과 상품 정보를 JSON으로 전송합니다. (이미지는 /api/uploads 에서 먼저 업로드)",
     tags: ["Admin Products"],
     security: [{ bearerAuth: [] }],
     request: {
         body: {
-            content: {
-                "multipart/form-data": {
-                    schema: createProductSchema.extend({
-                        images: z
-                            .any()
-                            .openapi({
-                                type: "array",
-                                items: { type: "string", format: "binary" },
-                            }),
-                    }),
-                },
-            },
+            content: { "application/json": { schema: createProductSchema } },
         },
     },
     responses: {
@@ -69,8 +63,8 @@ registry.registerPath({
 registry.registerPath({
     method: "put",
     path: "/admin/products/{id}",
-    summary: "상품 정보 수정 (텍스트만)",
-    description: "이미지 수정은 별도 API를 사용하거나 추후 구현",
+    summary: "상품 수정 (JSON)",
+    description: "상품 정보 및 이미지를 수정합니다. (이미지 배열 전체를 새로 보냄)",
     tags: ["Admin Products"],
     security: [{ bearerAuth: [] }],
     request: {

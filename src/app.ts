@@ -14,6 +14,7 @@ import adminCategoryRoute from "./routes/admin.category.route";
 import userRoute from "./routes/user.route";
 import productRoute from "./routes/product.route";
 import adminProductRoute from "./routes/admin.product.route";
+import uploadRoute from "./routes/upload.route";
 
 const app = express();
 const PORT = process.env.PORT || 4101;
@@ -38,6 +39,7 @@ app.use(
 
 app.use(validateClientKey);
 
+app.use("/api/upload", uploadRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/admin/users", adminUserRoute);
 app.use("/api/admin/categories", adminCategoryRoute);
