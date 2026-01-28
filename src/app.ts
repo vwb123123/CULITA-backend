@@ -43,6 +43,7 @@ app.use("/api/uploads", uploadRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/admin/users", adminUserRoute);
 app.use("/api/admin/categories", adminCategoryRoute);
+app.use("/api/admin/products", adminProductRoute);
 app.use("/api/products", adminProductRoute);
 app.use("/api/users", userRoute);
 app.use("/api/categories", categoryRoute);
