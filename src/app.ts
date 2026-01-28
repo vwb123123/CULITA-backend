@@ -39,7 +39,7 @@ app.use(
 
 app.use(validateClientKey);
 
-app.use("/api/upload", uploadRoute);
+app.use("/api/uploads", uploadRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/admin/users", adminUserRoute);
 app.use("/api/admin/categories", adminCategoryRoute);
