@@ -5,7 +5,9 @@ import { ProductImageType, Prisma } from "@prisma/client";
 
 export class ProductService {
     async getProducts(query: ProductListQuery) {
-        const { page, limit, categoryId, isBest, isNew, sort } = query;
+        const page = Number(query.page) || 1;
+        const limit = Number(query.limit) || 10;
+        const { categoryId, isBest, isNew, sort } = query;
         const skip = (page - 1) * limit;
 
         const where: Prisma.ProductWhereInput = {};
