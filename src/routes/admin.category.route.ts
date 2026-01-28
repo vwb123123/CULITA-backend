@@ -15,18 +15,18 @@ const adminCategoryController = new AdminCategoryController();
 router.use(authenticateJwt, isAdmin);
 
 router.post(
-    "/categories",
+    "/",
     validateBody(createCategorySchema),
     adminCategoryController.createCategory,
 );
 router.put(
-    "/categories/:id",
+    "/:id",
     validateParams(categoryIdParamSchema),
     validateBody(updateCategorySchema),
     adminCategoryController.updateCategory,
 );
 router.delete(
-    "/categories/:id",
+    "/:id",
     validateParams(categoryIdParamSchema),
     adminCategoryController.deleteCategory,
 );
