@@ -5,7 +5,8 @@ import { HttpException } from "../utils/exception.utils";
 
 export class AdminProductService {
     async createProduct(data: CreateProductInput) {
-        const category = await prisma.category.findUnique({ where: { id: data.categoryId } });
+        const categoryId = Number(data.categoryId);
+        const category = await prisma.category.findUnique({ where: { id: categoryId } });
         if (!category) throw new HttpException(404, "존재하지 않는 카테고리입니다.");
 
         return await prisma.$transaction(async tx => {
@@ -14,11 +15,14 @@ export class AdminProductService {
             return await tx.product.create({
                 data: {
                     ...productData,
+                    categoryId: categoryId,
+                    price: Number(productData.price),
+                    stock: Number(productData.stock),
                     images: {
                         create: images.map(img => ({
                             url: img.url,
                             type: img.type,
-                            order: img.order,
+                            order: Number(img.order),
                         })),
                     },
                 },
