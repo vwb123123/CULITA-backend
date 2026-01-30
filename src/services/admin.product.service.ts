@@ -42,11 +42,12 @@ export class AdminProductService {
 
             if (updateData.price !== undefined) updateData.price = Number(updateData.price);
             if (updateData.stock !== undefined) updateData.stock = Number(updateData.stock);
-            if (updateData.categoryId !== undefined) updateData.categoryId = Number(updateData.categoryId);
+            if (updateData.categoryId !== undefined)
+                updateData.categoryId = Number(updateData.categoryId);
 
             const updatedProduct = await tx.product.update({
                 where: { id },
-                data: productData,
+                data: updateData,
             });
 
             if (images) {
