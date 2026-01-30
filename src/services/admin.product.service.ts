@@ -38,6 +38,12 @@ export class AdminProductService {
         return await prisma.$transaction(async tx => {
             const { images, ...productData } = data;
 
+            const updateData: any = { ...productData };
+
+            if (updateData.price !== undefined) updateData.price = Number(updateData.price);
+            if (updateData.stock !== undefined) updateData.stock = Number(updateData.stock);
+            if (updateData.categoryId !== undefined) updateData.categoryId = Number(updateData.categoryId);
+
             const updatedProduct = await tx.product.update({
                 where: { id },
                 data: productData,
@@ -52,7 +58,7 @@ export class AdminProductService {
                             productId: id,
                             url: img.url,
                             type: img.type,
-                            order: img.order,
+                            order: Number(img.order),
                         })),
                     });
                 }
