@@ -4,6 +4,8 @@ import { registry } from "../config/openApi";
 
 extendZodWithOpenApi(z);
 
+const OPEN_API_TAG = "Uploads";
+
 export const uploadResponseSchema = z.object({
     url: z.string().openapi({ example: "https://storage.googleapis.com/..." }),
 });
@@ -17,7 +19,7 @@ registry.registerPath({
     path: "/uploads",
     summary: "이미지 업로드",
     description: "단일 이미지 파일을 업로드하고 URL을 반환합니다.",
-    tags: ["Uploads"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         body: {
@@ -48,7 +50,7 @@ registry.registerPath({
     path: "/uploads",
     summary: "이미지 삭제",
     description: "업로드된 이미지 URL을 받아 스토리지에서 삭제합니다.",
-    tags: ["Uploads"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         body: {

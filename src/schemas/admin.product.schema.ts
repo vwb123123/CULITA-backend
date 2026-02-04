@@ -2,6 +2,11 @@ import { z } from "zod";
 import { registry } from "../config/openApi";
 import { productDetailSchema } from "./product.schema";
 import { ProductImageType } from "@prisma/client";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+
+extendZodWithOpenApi(z);
+
+const OPEN_API_TAG = "Admin/Products";
 
 const productImageInputSchema = z.object({
     url: z.url().openapi({ example: "https://storage.googleapis.com/..." }),
@@ -41,7 +46,7 @@ registry.registerPath({
     summary: "상품 등록 (이미지 업로드)",
     description:
         "이미지 URL과 상품 정보를 JSON으로 전송합니다. (이미지는 /api/uploads 에서 먼저 업로드)",
-    tags: ["Admin Products"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         body: {
@@ -65,7 +70,7 @@ registry.registerPath({
     path: "/admin/products/{id}",
     summary: "상품 수정 (JSON)",
     description: "상품 정보 및 이미지를 수정합니다. (이미지 배열 전체를 새로 보냄)",
-    tags: ["Admin Products"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: z.object({ id: z.coerce.number() }),
@@ -81,7 +86,7 @@ registry.registerPath({
     path: "/admin/products/{id}",
     summary: "상품 삭제",
     description: "DB 데이터와 Firebase Storage의 이미지를 모두 삭제합니다.",
-    tags: ["Admin Products"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: z.object({ id: z.coerce.number() }),

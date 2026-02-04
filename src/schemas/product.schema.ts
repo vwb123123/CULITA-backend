@@ -5,6 +5,8 @@ import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 
 extendZodWithOpenApi(z);
 
+const OPEN_API_TAG = "Products";
+
 export const productIdParamSchema = z.object({
     id: z.coerce.number().openapi({ example: 1, description: "상품 ID" }),
 });
@@ -76,7 +78,7 @@ registry.registerPath({
     path: "/products",
     summary: "상품 목록 조회",
     description: "카테고리, 베스트/신상 여부, 정렬 조건을 지원합니다.",
-    tags: ["Products"],
+    tags: [OPEN_API_TAG],
     request: { query: productListQuerySchema },
     responses: {
         200: {
@@ -90,7 +92,7 @@ registry.registerPath({
     method: "get",
     path: "/products/{id}",
     summary: "상품 상세 조회",
-    tags: ["Products"],
+    tags: [OPEN_API_TAG],
     request: { params: productIdParamSchema },
     responses: {
         200: {

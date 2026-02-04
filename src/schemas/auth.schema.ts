@@ -5,6 +5,8 @@ import { Role } from "@prisma/client";
 
 extendZodWithOpenApi(z);
 
+const OPEN_API_TAG = "Auth";
+
 export const registerSchema = z
     .object({
         username: z.string().min(4).openapi({ example: "user123" }),
@@ -44,7 +46,7 @@ registry.registerPath({
     method: "post",
     path: "/auth/register",
     summary: "회원가입",
-    tags: ["Auth"],
+    tags: [OPEN_API_TAG],
     request: {
         body: {
             content: {
@@ -73,7 +75,7 @@ registry.registerPath({
     method: "post",
     path: "/auth/login",
     summary: "로그인",
-    tags: ["Auth"],
+    tags: [OPEN_API_TAG],
     request: {
         body: {
             content: {

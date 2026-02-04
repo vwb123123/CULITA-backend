@@ -5,6 +5,8 @@ import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 
 extendZodWithOpenApi(z);
 
+const OPEN_API_TAG = "Admin/Users";
+
 export const userIdParamSchema = z.object({
     id: z.coerce.number().openapi({ example: 1, description: "사용자 ID" }),
 });
@@ -47,7 +49,7 @@ registry.registerPath({
     method: "get",
     path: "/admin/users",
     summary: "전체 회원 목록 조회",
-    tags: ["Admin Users"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         query: paginationQuerySchema,
@@ -76,7 +78,7 @@ registry.registerPath({
     method: "get",
     path: "/admin/users/{id}",
     summary: "회원 상세 조회",
-    tags: ["Admin Users"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: userIdParamSchema,
@@ -98,7 +100,7 @@ registry.registerPath({
     method: "post",
     path: "/admin/users",
     summary: "회원 직접 생성 (관리자)",
-    tags: ["Admin Users"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         body: {
@@ -125,7 +127,7 @@ registry.registerPath({
     method: "put",
     path: "/admin/users/{id}",
     summary: "회원 정보 수정 (관리자)",
-    tags: ["Admin Users"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: userIdParamSchema,
@@ -152,7 +154,7 @@ registry.registerPath({
     method: "delete",
     path: "/admin/users/{id}",
     summary: "회원 삭제 (관리자)",
-    tags: ["Admin Users"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: userIdParamSchema,

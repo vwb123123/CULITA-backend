@@ -5,6 +5,8 @@ import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 
 extendZodWithOpenApi(z);
 
+const OPEN_API_TAG = "Admin/Categories";
+
 export const categoryIdParamSchema = z.object({
     id: z.coerce.number().openapi({ example: 1, description: "카테고리 ID" }),
 });
@@ -39,7 +41,7 @@ registry.registerPath({
     method: "post",
     path: "/admin/categories",
     summary: "카테고리 생성 (관리자)",
-    tags: ["Admin Categories"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         body: { content: { "application/json": { schema: createCategorySchema } } },
@@ -65,7 +67,7 @@ registry.registerPath({
     method: "put",
     path: "/admin/categories/{id}",
     summary: "카테고리 수정 (관리자)",
-    tags: ["Admin Categories"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: categoryIdParamSchema,
@@ -92,7 +94,7 @@ registry.registerPath({
     method: "delete",
     path: "/admin/categories/{id}",
     summary: "카테고리 삭제 (관리자)",
-    tags: ["Admin Categories"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: categoryIdParamSchema,

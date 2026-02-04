@@ -2,6 +2,8 @@ import { z } from "zod";
 import { registry } from "../config/openApi";
 import { userResponseSchema } from "./auth.schema";
 
+const OPEN_API_TAG = "Users";
+
 export const updateProfileSchema = z.object({
     name: z
         .string()
@@ -40,7 +42,7 @@ registry.registerPath({
     path: "/users/me",
     summary: "내 정보 수정",
     description: "로그인한 사용자의 이름, 전화번호를 수정합니다.",
-    tags: ["Users"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         body: { content: { "application/json": { schema: updateProfileSchema } } },
@@ -65,7 +67,7 @@ registry.registerPath({
     path: "/users/me/password",
     summary: "비밀번호 변경",
     description: "현재 비밀번호를 확인 후 새 비밀번호로 변경합니다.",
-    tags: ["Users"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         body: { content: { "application/json": { schema: changePasswordSchema } } },

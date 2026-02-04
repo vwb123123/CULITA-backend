@@ -4,6 +4,8 @@ import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 
 extendZodWithOpenApi(z);
 
+const OPEN_API_TAG = "Cart";
+
 export const addToCartSchema = z.object({
     productId: z.number().openapi({ example: 1, description: "상품 ID" }),
     quantity: z.number().min(1).default(1).openapi({ example: 1, description: "담을 수량" }),
@@ -48,7 +50,7 @@ registry.registerPath({
     method: "get",
     path: "/cart",
     summary: "내 장바구니 조회",
-    tags: ["Cart"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     responses: {
         200: {
@@ -63,7 +65,7 @@ registry.registerPath({
     path: "/cart",
     summary: "장바구니 담기",
     description: "이미 담긴 상품이면 수량을 추가(increment)하고, 없으면 새로 추가합니다.",
-    tags: ["Cart"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         body: { content: { "application/json": { schema: addToCartSchema } } },
@@ -82,7 +84,7 @@ registry.registerPath({
     method: "put",
     path: "/cart/items/{itemId}",
     summary: "장바구니 아이템 수량 변경",
-    tags: ["Cart"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: cartItemIdParamSchema,
@@ -98,7 +100,7 @@ registry.registerPath({
     method: "delete",
     path: "/cart/items/{itemId}",
     summary: "장바구니 아이템 삭제",
-    tags: ["Cart"],
+    tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: {
         params: cartItemIdParamSchema,
