@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { UserOrderService } from "../services/order.service";
 import { GetOrderListQuery } from "../schemas/order.schema";
+import { User } from "@prisma/client";
 
 const orderService = new UserOrderService();
 
@@ -18,7 +19,8 @@ export class UserOrderController {
     // 결제 승인
     async confirm(req: Request, res: Response, next: NextFunction) {
         try {
-            const result = await orderService.confirmOrder(req.user!.id, req.body);
+            const user = req.user as User;
+            const result = await orderService.confirmOrder(user.id, req.body);
             res.status(200).json({ message: "주문 및 결제 완료", data: result });
         } catch (error) {
             next(error);

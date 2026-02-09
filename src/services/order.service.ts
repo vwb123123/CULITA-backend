@@ -46,8 +46,10 @@ export class UserOrderService {
 
     // --- 2. 결제 승인 ---
     async confirmOrder(userId: number, data: ConfirmOrderInput) {
+        const dbOrderId = Number(data.orderId.split("_")[1]);
+
         const order = await prisma.order.findUnique({
-            where: { id: data.orderId },
+            where: { id: dbOrderId },
         });
 
         if (!order) throw new HttpException(404, "주문을 찾을 수 없습니다.");
@@ -58,28 +60,28 @@ export class UserOrderService {
         try {
             // 토스 결제 승인 API 호출
             const secretKey = process.env.TOSS_SECRET_KEY;
-            const basicToken = Buffer.from(`${secretKey}:`).toString("base64");
+            const encryptedSecretKey = "Basic " + Buffer.from(secretKey + ":").toString("base64");
 
             const response = await axios.post(
                 "https://api.tosspayments.com/v1/payments/confirm",
                 {
                     paymentKey: data.paymentKey,
-                    orderId: `order_${order.id}_${Date.now()}`, // 토스 쪽 주문 ID (Unique해야 함)
+                    orderId: data.orderId,
                     amount: data.amount,
                 },
                 {
                     headers: {
-                        Authorization: `Basic ${basicToken}`,
+                        Authorization: encryptedSecretKey,
                         "Content-Type": "application/json",
                     },
-                }
+                },
             );
 
             // DB 트랜잭션: 결제 정보 저장 및 주문 상태 업데이트
             return await prisma.$transaction(async (tx) => {
                 await tx.payment.create({
                     data: {
-                        orderId: order.id,
+                        orderId: dbOrderId,
                         method: response.data.method,
                         amount: data.amount,
                         status: "PAID",

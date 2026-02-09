@@ -33,7 +33,7 @@ export const createOrderSchema = z.object({
 
 // --- 2. 결제 승인 (Confirm) ---
 export const confirmOrderSchema = z.object({
-    orderId: z.number().openapi({ example: 1, description: "주문서 생성 시 받은 주문 ID" }),
+    orderId: z.string().openapi({ example: 1, description: "주문서 생성 시 받은 주문 ID" }),
     paymentKey: z
         .string()
         .openapi({ example: "toss_payment_key_xyz", description: "토스 결제 키" }),
