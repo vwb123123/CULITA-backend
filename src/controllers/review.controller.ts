@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { UserReviewService } from "../services/review.service";
-import { GetProductReviewsQuery, GetMyReviewsQuery } from "../schemas/review.schema";
+import {
+    GetProductReviewsQuery,
+    GetMyReviewsQuery,
+    ReviewSortType,
+} from "../schemas/review.schema";
 
 const reviewService = new UserReviewService();
 
@@ -18,8 +22,13 @@ export class UserReviewController {
     // 상품 리뷰 목록 (공개)
     async getProductReviews(req: Request, res: Response, next: NextFunction) {
         try {
-            // Type Assertion (미들웨어에서 coercion 처리됨을 가정)
-            const query = req.query as unknown as GetProductReviewsQuery;
+            const { page, limit, sort, productId } = req.query;
+            const query: GetProductReviewsQuery = {
+                page: page ? Number(page) : 1,
+                limit: limit ? Number(limit) : 10,
+                sort: (sort as ReviewSortType) || "latest",
+                productId: Number(productId), // 필수값이므로 변환
+            };
             const result = await reviewService.getProductReviews(query);
             res.status(200).json(result);
         } catch (error) {
@@ -30,7 +39,12 @@ export class UserReviewController {
     // 내 리뷰 목록 (개인)
     async getMyReviews(req: Request, res: Response, next: NextFunction) {
         try {
-            const query = req.query as unknown as GetMyReviewsQuery;
+            const { page, limit, sort } = req.query;
+            const query: GetMyReviewsQuery = {
+                page: page ? Number(page) : 1,
+                limit: limit ? Number(limit) : 10,
+                sort: (sort as ReviewSortType) || "latest",
+            };
             const result = await reviewService.getMyReviews(req.user!.id, query);
             res.status(200).json(result);
         } catch (error) {

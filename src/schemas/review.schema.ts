@@ -9,6 +9,7 @@ const OPEN_API_TAG = "Reviews";
 
 // --- Enums ---
 export const ReviewSortEnum = z.enum(["latest", "rating_desc", "rating_asc"]);
+export type ReviewSortType = z.infer<typeof ReviewSortEnum>;
 
 // --- 공통 파라미터 ---
 export const reviewIdParamSchema = z.object({
