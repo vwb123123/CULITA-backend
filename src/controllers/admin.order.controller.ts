@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AdminOrderService } from "../services/admin.order.service";
+import { GetAdminOrderListQuery } from "../schemas/admin.order.schema";
+import { OrderStatus } from "@prisma/client";
 
 const adminOrderService = new AdminOrderService();
 
@@ -7,7 +9,16 @@ export class AdminOrderController {
     // 전체 주문 조회
     async getAllOrders(req: Request, res: Response, next: NextFunction) {
         try {
-            const query = req.query as any;
+            const { page, limit, status, search, startDate, endDate } = req.query;
+
+            const query: GetAdminOrderListQuery = {
+                page: page ? Number(page) : 1,
+                limit: limit ? Number(limit) : 10,
+                status: status as OrderStatus | undefined,
+                search: search as string | undefined,
+                startDate: startDate as string | undefined,
+                endDate: endDate as string | undefined,
+            };
             const result = await adminOrderService.getAllOrders(query);
             res.status(200).json({ message: "조회 성공", data: result });
         } catch (error) {

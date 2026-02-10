@@ -30,7 +30,11 @@ export class UserOrderController {
     // 주문 목록 조회
     async getMyOrders(req: Request, res: Response, next: NextFunction) {
         try {
-            const query = req.query as unknown as GetOrderListQuery;
+            const { page, limit } = req.query;
+            const query: GetOrderListQuery = {
+                page: page ? Number(page) : 1,
+                limit: limit ? Number(limit) : 10,
+            };
             const result = await orderService.getMyOrders(req.user!.id, query);
             res.status(200).json({ message: "조회 성공", data: result });
         } catch (error) {
