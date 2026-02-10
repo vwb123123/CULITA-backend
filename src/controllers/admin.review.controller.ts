@@ -5,11 +5,19 @@ import { GetAdminReviewListQuery } from "../schemas/admin.review.schema";
 const adminReviewService = new AdminReviewService();
 
 export class AdminReviewController {
-    // 전체 리뷰 조회
     async getAllReviews(req: Request, res: Response, next: NextFunction) {
         try {
-            // Type Assertion: 미들웨어 검증 후 안전하게 타입 변환
-            const query = req.query as unknown as GetAdminReviewListQuery;
+            const { page, limit, search, productId, userId, startDate, endDate } = req.query;
+
+            const query: GetAdminReviewListQuery = {
+                page: page ? Number(page) : 1,
+                limit: limit ? Number(limit) : 10,
+                search: search as string | undefined,
+                productId: productId ? Number(productId) : undefined,
+                userId: userId ? Number(userId) : undefined,
+                startDate: startDate ? startDate as string : undefined,
+                endDate: endDate ? endDate as string : undefined,
+            };
 
             const result = await adminReviewService.getAllReviews(query);
             res.status(200).json(result);

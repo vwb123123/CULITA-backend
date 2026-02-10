@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { UserInquiryService } from "../services/inquiry.service";
 import { GetInquiryListQuery } from "../schemas/inquiry.schema";
+import { InquiryStatus, InquiryType } from "@prisma/client";
 
 const inquiryService = new UserInquiryService();
 
@@ -18,8 +19,15 @@ export class UserInquiryController {
     // 내 문의 목록 조회
     async getMyInquiries(req: Request, res: Response, next: NextFunction) {
         try {
-            // 미들웨어 Coercion 후 타입 단언
-            const query = req.query as unknown as GetInquiryListQuery;
+            const { page, limit, type, status } = req.query;
+
+            const query: GetInquiryListQuery = {
+                page: page ? Number(page) : 1,
+                limit: limit ? Number(limit) : 10,
+                type: type as InquiryType | undefined,
+                status: status as InquiryStatus | undefined,
+            };
+
             const result = await inquiryService.getMyInquiries(req.user!.id, query);
             res.status(200).json(result);
         } catch (error) {
