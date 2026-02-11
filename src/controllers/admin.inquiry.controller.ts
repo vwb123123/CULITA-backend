@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AdminInquiryService } from "../services/admin.inquiry.service";
 import { GetAdminInquiryListQuery } from "../schemas/admin.inquiry.schema";
+import { InquiryStatus, InquiryType } from "@prisma/client";
 
 const inquiryService = new AdminInquiryService();
 
@@ -8,8 +9,16 @@ export class AdminInquiryController {
     // 전체 조회
     async getAllInquiries(req: Request, res: Response, next: NextFunction) {
         try {
-            // 미들웨어 Coercion 적용 가정
-            const query = req.query as unknown as GetAdminInquiryListQuery;
+            const { page, limit, type, status, search, startDate, endDate } = req.query;
+            const query: GetAdminInquiryListQuery = {
+                page: page ? Number(page) : 1,
+                limit: limit ? Number(limit) : 10,
+                type: type as InquiryType | undefined,
+                status: status as InquiryStatus | undefined,
+                search: search as string | undefined,
+                startDate: startDate as string | undefined,
+                endDate: endDate as string | undefined,
+            };
             const result = await inquiryService.getAllInquiries(query);
             res.status(200).json(result);
         } catch (error) {

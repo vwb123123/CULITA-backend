@@ -24,7 +24,22 @@ export const getAdminInquiryListQuerySchema = paginationQuerySchema.extend({
 
 // --- 2. 답변 등록/수정 ---
 export const answerInquirySchema = z.object({
-    answer: z.string().min(1, "답변 내용을 입력해주세요.").openapi({ example: "안녕하세요, 문의하신 내용은..." }),
+    answer: z
+        .string()
+        .min(1, "답변 내용을 입력해주세요.")
+        .openapi({ example: "안녕하세요, 문의하신 내용은..." }),
+});
+
+const inquiryUserSchema = z.object({
+    id: z.number().openapi({ example: 10 }),
+    name: z.string().openapi({ example: "홍길동" }),
+    email: z.email().openapi({ example: "user@example.com" }),
+    phoneNumber: z.string().optional().openapi({ example: "010-1234-5678" }),
+});
+
+const inquiryImageSchema = z.object({
+    id: z.number().openapi({ example: 55 }),
+    url: z.url().openapi({ example: "https://storage.googleapis.com/.../image.jpg" }),
 });
 
 // --- 응답 모델 ---
@@ -37,12 +52,8 @@ const adminInquiryResponseSchema = z.object({
     answer: z.string().nullable(),
     answeredAt: z.date().nullable(),
     createdAt: z.date(),
-    user: z.object({
-        id: z.number(),
-        name: z.string(),
-        email: z.string(),
-    }),
-    images: z.array(z.object({ url: z.string() })),
+    user: inquiryUserSchema,
+    images: z.array(inquiryImageSchema),
 });
 
 export type GetAdminInquiryListQuery = z.infer<typeof getAdminInquiryListQuerySchema>;
@@ -74,7 +85,20 @@ registry.registerPath({
     tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: { params: adminInquiryIdParamSchema },
-    responses: { 200: { description: "조회 성공" } },
+    responses: {
+        200: {
+            description: "조회 성공",
+            content: {
+                "application/json": {
+                    schema: z.object({
+                        message: z.string().openapi({ example: "상세 조회 성공" }),
+                        data: adminInquiryResponseSchema,
+                    }),
+                },
+            },
+        },
+        404: { description: "해당 문의를 찾을 수 없음" },
+    },
 });
 
 // 3. 답변 등록/수정
@@ -86,9 +110,21 @@ registry.registerPath({
     security: [{ bearerAuth: [] }],
     request: {
         params: adminInquiryIdParamSchema,
-        body: { content: { "application/json": { schema: answerInquirySchema } } }
+        body: { content: { "application/json": { schema: answerInquirySchema } } },
     },
-    responses: { 200: { description: "답변 등록 성공" } },
+    responses: {
+        200: {
+            description: "답변 등록 성공",
+            content: {
+                "application/json": {
+                    schema: z.object({
+                        message: z.string().openapi({ example: "답변이 등록되었습니다." }),
+                        data: adminInquiryResponseSchema,
+                    }),
+                },
+            },
+        },
+    },
 });
 
 // 4. 문의 삭제 (강제 삭제)
@@ -99,5 +135,17 @@ registry.registerPath({
     tags: [OPEN_API_TAG],
     security: [{ bearerAuth: [] }],
     request: { params: adminInquiryIdParamSchema },
-    responses: { 200: { description: "삭제 성공" } },
+    responses: {
+        200: {
+            description: "삭제 성공",
+            content: {
+                "application/json": {
+                    schema: z.object({
+                        message: z.string().openapi({ example: "문의가 삭제되었습니다." }),
+                        deletedId: z.number().openapi({ example: 1 }),
+                    }),
+                },
+            },
+        },
+    },
 });
