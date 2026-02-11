@@ -13,6 +13,13 @@ export class UserService {
             data: {
                 name: data.name,
                 phoneNumber: data.phoneNumber,
+                gender: data.gender,
+                zipCode: data.zipCode,
+                address1: data.address1,
+                address2: data.address2,
+                birthYear: data.birthYear,
+                birthMonth: data.birthMonth,
+                birthDay: data.birthDay,
             },
         });
 

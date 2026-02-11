@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { AuthService } from "../services/auth.service";
+import { RegisterInput } from "../schemas/auth.schema";
 
 const authService = new AuthService();
 
 export class AuthController {
     async register(req: Request, res: Response, next: NextFunction) {
         try {
-            const user = await authService.register(req.body);
+            const body = req.body as RegisterInput;
+            const user = await authService.register(body);
 
             res.status(201).json({
                 message: "회원가입에 성공했습니다.",

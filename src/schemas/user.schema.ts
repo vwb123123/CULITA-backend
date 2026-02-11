@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { registry } from "../config/openApi";
 import { userResponseSchema } from "./auth.schema";
+import { Gender } from "@prisma/client";
 
 const OPEN_API_TAG = "Users";
 
@@ -15,6 +16,13 @@ export const updateProfileSchema = z.object({
         .regex(/^\d{3}-\d{3,4}-\d{4}$/, "전화번호 형식이 올바르지 않습니다.")
         .optional()
         .openapi({ example: "010-5678-1234" }),
+    gender: z.enum(Gender).optional().openapi({ example: "MALE" }),
+    zipCode: z.string().min(5).optional().openapi({ example: "12345" }),
+    address1: z.string().min(1).optional().openapi({ example: "서울시 강남구" }),
+    address2: z.string().optional().openapi({ example: "101동 101호" }),
+    birthYear: z.string().length(4).optional().openapi({ example: "1990" }),
+    birthMonth: z.string().min(1).max(2).optional().openapi({ example: "01" }),
+    birthDay: z.string().min(1).max(2).openapi({ example: "01" }),
 });
 
 export const changePasswordSchema = z

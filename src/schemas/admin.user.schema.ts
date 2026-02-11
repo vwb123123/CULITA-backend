@@ -2,6 +2,7 @@ import { z } from "zod";
 import { registry } from "../config/openApi";
 import { userResponseSchema } from "./auth.schema";
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+import { Gender, Role } from "@prisma/client";
 
 extendZodWithOpenApi(z);
 
@@ -30,7 +31,14 @@ export const createUserSchema = z.object({
         .string()
         .regex(/^\d{3}-\d{3,4}-\d{4}$/)
         .openapi({ example: "010-9999-8888" }),
-    role: z.enum(["USER", "ADMIN"]).optional().default("USER").openapi({ example: "USER" }),
+    role: z.enum(Role).optional().default(Role.USER).openapi({ example: "USER" }),
+    gender: z.enum(Gender).openapi({ example: "MALE" }),
+    zipCode: z.string().min(5).openapi({ example: "12345" }),
+    address1: z.string().min(1).openapi({ example: "서울시 강남구" }),
+    address2: z.string().optional().openapi({ example: "상세주소" }),
+    birthYear: z.string().length(4).openapi({ example: "1990" }),
+    birthMonth: z.string().min(1).max(2).openapi({ example: "01" }),
+    birthDay: z.string().min(1).max(2).openapi({ example: "01" }),
 });
 
 export const updateUserSchema = z.object({
@@ -42,7 +50,14 @@ export const updateUserSchema = z.object({
         .regex(/^\d{3}-\d{3,4}-\d{4}$/)
         .optional()
         .openapi({ example: "010-7777-6666" }),
-    role: z.enum(["USER", "ADMIN"]).optional().openapi({ example: "ADMIN" }),
+    role: z.enum(Role).optional().openapi({ example: "ADMIN" }),
+    gender: z.enum(Gender).openapi({ example: "MALE" }),
+    zipCode: z.string().min(5).openapi({ example: "43812" }),
+    address1: z.string().min(1).openapi({ example: "서울 서초구 서초대로 132" }),
+    address2: z.string().optional().openapi({ example: "대흥빌딩" }),
+    birthYear: z.string().length(4).openapi({ example: "1912 " }),
+    birthMonth: z.string().min(1).max(2).openapi({ example: "01" }),
+    birthDay: z.string().min(1).max(2).optional().openapi({ example: "01" }),
 });
 
 registry.registerPath({

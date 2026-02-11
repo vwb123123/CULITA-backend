@@ -49,8 +49,8 @@ export class AdminUserService {
     }
 
     async createUser(data: CreateUserInput) {
-        const existingUser = await prisma.user.findUnique({
-            where: { email: data.email },
+        const existingUser = await prisma.user.findFirst({
+            where: { OR: [{ email: data.email }, { username: data.username }] },
         });
 
         if (existingUser) {
@@ -66,8 +66,14 @@ export class AdminUserService {
                 name: data.name,
                 password: hashedPassword,
                 phoneNumber: data.phoneNumber,
-                // Role 타입 캐스팅 (Zod string enum -> Prisma enum)
-                role: (data.role as Role) || Role.USER,
+                role: data.role,
+                gender: data.gender,
+                zipCode: data.zipCode,
+                address1: data.address1,
+                address2: data.address2,
+                birthYear: data.birthYear,
+                birthMonth: data.birthMonth,
+                birthDay: data.birthDay,
             },
         });
 

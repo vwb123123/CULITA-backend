@@ -13,6 +13,11 @@ enum Role {
   ADMIN
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 enum ProductImageType {
   MAIN
   HOVER
@@ -58,6 +63,13 @@ model User {
   password    String
   phoneNumber String
   role        Role
+  gender      Gender
+  zipCode     String
+  address1    String
+  address2    String?
+  birthYear   String
+  birthMonth  String
+  birthDay    String
 
   cart      Cart?
   orders    Order[]

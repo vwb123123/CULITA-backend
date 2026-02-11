@@ -9,7 +9,20 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export class AuthService {
     async register(data: RegisterInput) {
-        const { username, email, password, name, phoneNumber } = data;
+        const {
+            username,
+            email,
+            password,
+            name,
+            phoneNumber,
+            gender,
+            zipCode,
+            address1,
+            address2,
+            birthYear,
+            birthMonth,
+            birthDay,
+        } = data;
 
         const existingUser = await prisma.user.findFirst({
             where: { OR: [{ email }, { username }] },
@@ -29,6 +42,13 @@ export class AuthService {
                 phoneNumber,
                 role: Role.USER,
                 password: hashedPassword,
+                gender,
+                zipCode,
+                address1,
+                address2,
+                birthYear,
+                birthMonth,
+                birthDay,
             },
         });
 
