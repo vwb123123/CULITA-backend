@@ -27,8 +27,11 @@ export const getAdminOrderListQuerySchema = z.object({
 
 // --- 2. 주문 상태 변경 (배송처리 등) ---
 export const updateOrderStatusSchema = z.object({
-    status: OrderStatusEnum.openapi({ example: "SHIPPED", description: "변경할 상태" }),
-    trackingNumber: z.string().optional().openapi({ example: "1234567890", description: "운송장 번호 (SHIPPED 시 필수 권장)" }),
+    status: OrderStatusEnum.openapi({ example: "SHIPPING", description: "변경할 상태" }),
+    trackingNumber: z
+        .string()
+        .optional()
+        .openapi({ example: "1234567890", description: "운송장 번호 (SHIPPING 시 필수 권장)" }),
     carrier: z.string().optional().openapi({ example: "CJ대한통운", description: "택배사" }),
 });
 
