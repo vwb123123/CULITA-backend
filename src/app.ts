@@ -42,8 +42,7 @@ app.use(
         theme: "purple",
     }),
 );
-app.use("/api/categories", categoryRoute);
-app.use("/api/products", productRoute);
+
 
 app.use(validateClientKey);
 
@@ -51,6 +50,8 @@ app.use("/api/uploads", uploadRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/cart", cartRoute);
+app.use("/api/categories", categoryRoute);
+app.use("/api/products", productRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/reviews", reviewRoute);
 app.use("/api/inquiries", inquiryRoute);
