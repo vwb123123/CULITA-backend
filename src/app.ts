@@ -30,8 +30,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(passport.initialize());
-passport.use(jwtStrategy);
+//app.use(passport.initialize());
+//passport.use(jwtStrategy);
 
 const openApiDocument = generateOpenApiDocs();
 
