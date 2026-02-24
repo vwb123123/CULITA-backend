@@ -23,7 +23,7 @@ import adminReviewRoute from "./routes/admin.review.route";
 import adminInquiryRoute from "./routes/admin.inquiry.route";
 
 const app = express();
-const PORT = process.env.PORT || 4101;
+const PORT = process.env.PORT || 4104;
 const API_DOCS_ROUTE = process.env.API_DOCS_ROUTE || "/api-docs";
 
 app.use(cors());
@@ -49,9 +49,9 @@ app.use("/api/uploads", uploadRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
+app.use("/api/cart", cartRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/products", productRoute);
-app.use("/api/cart", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/reviews", reviewRoute);
 app.use("/api/inquiries", inquiryRoute);
