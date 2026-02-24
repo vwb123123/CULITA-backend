@@ -23,15 +23,15 @@ import adminReviewRoute from "./routes/admin.review.route";
 import adminInquiryRoute from "./routes/admin.inquiry.route";
 
 const app = express();
-const PORT = process.env.PORT || 4101;
+const PORT = process.env.PORT || 4104;
 const API_DOCS_ROUTE = process.env.API_DOCS_ROUTE || "/api-docs";
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//app.use(passport.initialize());
-//passport.use(jwtStrategy);
+app.use(passport.initialize());
+passport.use(jwtStrategy);
 
 const openApiDocument = generateOpenApiDocs();
 
